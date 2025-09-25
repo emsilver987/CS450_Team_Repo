@@ -140,7 +140,7 @@ process_urlfile() {
         net_score=0.5
         
         # Output valid NDJSON format (clean output to stdout)
-        echo "{\"URL\":\"$url\",\"NET_SCORE\":$net_score,\"LATENCY\":$latency}"
+       echo "{\"url\":\"$url\",\"NET_SCORE\":$net_score,\"LATENCY\":$latency}"
         
         # Create blank log file for LOG_LEVEL=0
         touch "log.txt"
