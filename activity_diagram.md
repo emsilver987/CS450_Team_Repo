@@ -4,92 +4,90 @@
 
 ```mermaid
 flowchart TD
-    A[User Input] --> B{Input Type}
+    START([START]) --> INPUT[Input: User can view current catalogue or add AI/ML model to catalogue]
     
-    B -->|CLI Command| C[CLI Module]
-    B -->|Interactive Mode| D[Interactive Module]
-    B -->|Multiple URLs| E[Multiple URLs Handler]
+    INPUT --> DECISION{Did the user provide a model link?}
     
-    C --> F{Command Type}
-    F -->|models| G[GitHub Repository Handler]
-    F -->|hf-model| H[Hugging Face Model Handler]
-    F -->|hf-dataset| I[Hugging Face Dataset Handler]
+    %% Yes Path - Adding New Model
+    DECISION -->|Yes| YES[Yes]
+    YES --> FETCH[Fetching Information]
+    FETCH --> CHECK[Checking for compatibility]
+    CHECK --> CALC[Calculating Metrics]
     
-    G --> J[Fetch GitHub Data]
-    H --> K[Fetch HF Model Data]
-    I --> L[Fetch HF Dataset Data]
+    %% No Path - Viewing Existing Models
+    DECISION -->|No| NO[No]
     
-    J --> M[Format Repository Data]
-    K --> N[Format Model Data]
-    L --> O[Format Dataset Data]
+    %% Convergence Point
+    CALC --> OUTPUT[Output: Model metrics paired with netscore displayed for user evaluation]
+    NO --> OUTPUT
     
-    M --> P[Display Repository Info]
-    N --> Q{Output Format}
-    O --> R[Display Dataset Info]
+    %% Enhanced Implementation Details
+    FETCH --> FETCH_DETAILS[Fetch GitHub/HF Data]
+    FETCH_DETAILS --> LOCAL_ANALYSIS[Analyze Local Repository]
+    LOCAL_ANALYSIS --> CHECK
     
-    Q -->|text| S[Display Model Info]
-    Q -->|ndjson| T[Score Model]
+    CHECK --> CHECK_DETAILS[Check License Compatibility]
+    CHECK_DETAILS --> CALC
     
-    T --> U[Fetch Model Data]
-    U --> V[Analyze Local Repository]
-    V --> W[Run All Metrics]
+    CALC --> METRICS[Run All Metrics Concurrently]
+    METRICS --> SIZE[Size Metric]
+    METRICS --> LICENSE[License Metric]
+    METRICS --> BUS[Bus Factor Metric]
+    METRICS --> RAMP[Ramp Up Time Metric]
+    METRICS --> PERF[Performance Claims Metric]
+    METRICS --> AVAIL[Available Dataset & Code Metric]
+    METRICS --> DATASET[Dataset Quality Metric]
+    METRICS --> CODE[Code Quality Metric]
     
-    W --> X[Size Metric]
-    W --> Y[License Metric]
-    W --> Z[Bus Factor Metric]
-    W --> AA[Ramp Up Time Metric]
-    W --> BB[Performance Claims Metric]
-    W --> CC[Available Dataset & Code Metric]
-    W --> DD[Dataset Quality Metric]
-    W --> EE[Code Quality Metric]
+    SIZE --> NETSCORE[Calculate Net Score]
+    LICENSE --> NETSCORE
+    BUS --> NETSCORE
+    RAMP --> NETSCORE
+    PERF --> NETSCORE
+    AVAIL --> NETSCORE
+    DATASET --> NETSCORE
+    CODE --> NETSCORE
     
-    X --> FF[Calculate Net Score]
-    Y --> FF
-    Z --> FF
-    AA --> FF
-    BB --> FF
-    CC --> FF
-    DD --> FF
-    EE --> FF
+    NETSCORE --> OUTPUT
     
-    FF --> GG[Format NDJSON Output]
-    GG --> HH[Display Results]
+    OUTPUT --> END([END])
     
-    D --> II[Display Menu]
-    II --> JJ{User Choice}
-    JJ -->|GitHub| KK[GitHub Repository Browser]
-    JJ -->|Hugging Face| LL[Hugging Face Model Browser]
-    JJ -->|Exit| MM[Exit Application]
-    
-    KK --> NN[Select Owner]
-    NN --> OO[Select Repository]
-    OO --> PP[Fetch & Display Repository]
-    
-    LL --> QQ[Enter Model ID]
-    QQ --> RR[Fetch & Display Model]
-    
-    E --> SS[Read URL File]
-    SS --> TT[Process Each URL]
-    TT --> UU{URL Type}
-    UU -->|GitHub| VV[Process GitHub URL]
-    UU -->|Hugging Face| WW[Process HF URL]
-    VV --> XX[Score Repository]
-    WW --> YY[Score Model]
-    XX --> ZZ[Output NDJSON]
-    YY --> ZZ
-    
-    style A fill:#e1f5fe
-    style FF fill:#f3e5f5
-    style W fill:#fff3e0
-    style ZZ fill:#e8f5e8
+    %% Styling
+    style START fill:#e1f5fe,stroke:#01579b,stroke-width:3px
+    style END fill:#e1f5fe,stroke:#01579b,stroke-width:3px
+    style DECISION fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    style METRICS fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    style NETSCORE fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
+    style OUTPUT fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
 ```
 
 ## Key Changes from Initial Design:
 
-1. **Added Local Repository Analysis**: GitPython integration for cloning and analyzing HF repositories
-2. **Enhanced Error Handling**: Comprehensive error isolation and graceful degradation
-3. **Multiple Output Formats**: Support for both text and NDJSON output formats
-4. **Rate Limiting**: Token-based API rate limiting with fallback mechanisms
-5. **Concurrent Metric Execution**: Parallel execution of scoring metrics for performance
-6. **Interactive Mode**: Enhanced interactive browsing capabilities
-7. **Multiple URL Processing**: Batch processing of multiple URLs from file input
+### **Faithful to Original Design:**
+- ✅ **Core Flow Preserved**: Maintains the original START → Input → Decision → Fetch/Check/Calculate → Output → END flow
+- ✅ **Decision Point**: Keeps the "Did the user provide a model link?" decision structure
+- ✅ **Convergence**: Both paths (Yes/No) still converge at the Output stage
+- ✅ **User-Centric**: Focus remains on user evaluation and model selection
+
+### **Enhanced Implementation Details:**
+1. **Detailed Fetching Process**: 
+   - Original: "Fetching Information" 
+   - Enhanced: Fetch GitHub/HF Data → Analyze Local Repository (GitPython integration)
+
+2. **Enhanced Compatibility Checking**:
+   - Original: "Checking for compatibility"
+   - Enhanced: Check License Compatibility (LGPLv2.1 strict compliance)
+
+3. **Detailed Metrics Calculation**:
+   - Original: "Calculating Metrics"
+   - Enhanced: Run All Metrics Concurrently → Individual Metric Calculations → Net Score
+
+4. **Added Technical Enhancements**:
+   - **Concurrent Execution**: Parallel metric processing for performance
+   - **Error Isolation**: Comprehensive error handling with graceful degradation
+   - **Rate Limiting**: Token-based API rate limiting
+   - **Multiple Output Formats**: Text and NDJSON support
+   - **Local Analysis**: GitPython integration for repository analysis
+
+### **Design Validation:**
+The final implementation successfully realizes your original design vision while adding robust technical capabilities. The core user experience and decision flow remain unchanged, demonstrating good design evolution from concept to implementation.
